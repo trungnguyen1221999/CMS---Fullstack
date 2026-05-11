@@ -1,6 +1,6 @@
 # Project Requirements: Admin Dashboard & News Portal
 
-## 1. Admin Panel (Back-office)
+## 1. Admin Panel 
 - **Role Management**: Define, create, and manage system roles.
 - **User Management**: 
     - Assign and modify permissions.
@@ -14,7 +14,7 @@
 
 ---
 
-## 2. News Portal (Front-end)
+## 2. News Portal 
 - **Homepage**: Display featured content and latest news layout.
 - **Post Listings**: View articles filtered by categories or tags.
 - **Post Details**: Detailed view of article content, images, and videos.
