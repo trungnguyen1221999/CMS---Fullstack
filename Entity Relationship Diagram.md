@@ -81,7 +81,6 @@ erDiagram
         String ClaimValue
     }
 
-    erDiagram
     Posts ||--o{ PostTags : ""
     Tags ||--o{ PostTags : ""
     Posts ||--o{ PostInSeries : ""
