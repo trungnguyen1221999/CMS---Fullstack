@@ -1,34 +1,64 @@
 ## Database Design (ERD)
 
 ```mermaid
-graph LR
-    subgraph Users
-        Admin[Administrators]
-        Mod[Moderators]
-        Ed[Editors]
-        Vis[Visitors]
+graph TD
+    %% Define Actors
+    Admin_User[Administrators]
+    Mod_User[Moderators]
+    Ed_User[Editors]
+    Vis_User[Visitors]
+
+    %% Define UI Layer
+    subgraph Server_3["Server 3 (UI Layer)"]
+        AdminApp[Admin App]
     end
 
-    subgraph "Server 3 (Admin App)"
-        AdminApp[Admin Web Interface]
+    subgraph Server_2["Server 2 (UI Layer)"]
+        PortalApp[Portal App]
     end
 
-    subgraph "Server 2 (Portal App)"
-        PortalApp[News Portal Web]
+    subgraph Mobile_Device["Client Device"]
+        MobileApp[Mobile App]
     end
 
-    subgraph "Server 1 (API Services)"
-        API[Central Admin API]
+    %% Define API Layer
+    subgraph Server_1["Server 1 (API Layer)"]
+        AdminAPI[Admin API]
+        Text_Service[Text Service]
+        MobileAPI[Mobile API]
     end
 
-    subgraph "Server 4 (Database)"
-        DB[(SQL Database)]
+    %% Define Data Layer
+    subgraph Server_4["Server 4 (Data Layer)"]
+        DB[(Database)]
     end
 
-    %% Flow
-    Admin & Mod & Ed --> AdminApp
-    Ed & Vis --> PortalApp
+    %% Connections for Admin/Mod/Editor
+    Admin_User --> AdminApp
+    Mod_User --> AdminApp
+    Ed_User --> AdminApp
+    
+    %% Connections for Portal
+    Ed_User --> PortalApp
+    Vis_User --> PortalApp
 
-    AdminApp --> API
-    PortalApp --> API
-    API --> DB
+    %% Connections for Mobile
+    Vis_User --> MobileApp
+
+    %% Backend Flow
+    AdminApp --> AdminAPI
+    PortalApp --> AdminAPI
+    
+    MobileApp --> MobileAPI
+
+    %% Data Flow
+    AdminAPI --> DB
+    MobileAPI --> DB
+
+    %% Styling
+    style AdminApp fill:#d1e7dd,stroke:#198754
+    style PortalApp fill:#fff3cd,stroke:#ffc107
+    style MobileApp fill:#f8d7da,stroke:#dc3545
+    style AdminAPI fill:#cfe2ff,stroke:#0d6efd
+    style MobileAPI fill:#cfe2ff,stroke:#0d6efd
+    style DB fill:#6f42c1,stroke:#59359a,color:#fff
