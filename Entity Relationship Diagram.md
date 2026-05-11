@@ -4,57 +4,141 @@ The following diagram illustrates the database structure based on the system des
 
 ```mermaid
 erDiagram
-    AppUsers ||--o{ AppUserRoles : "User has roles"
-    AppRoles ||--o{ AppUserRoles : "Role assigned to users"
-    AppUsers ||--o{ AppUserClaims : "User claims"
-    AppUsers ||--o{ AppUserLogins : "External logins"
-    AppUsers ||--o{ AppUserTokens : "User tokens"
-    AppRoles ||--o{ AppRoleClaims : "Role claims"
-
-    AppUsers ||--o{ Posts : "OwnerUserId"
-    AppUsers ||--o{ Series : "OwnerUserId"
-    AppUsers ||--o{ PostActivityLogs : "UserId"
-
-    PostCategories ||--o{ Posts : "CategoryId"
-    Posts ||--o{ PostTags : "PostId"
-    Tags ||--o{ PostTags : "TagId"
-    
-    Posts ||--o{ PostInSeries : "PostId"
-    Series ||--o{ PostInSeries : "SeriesId"
-    
-    Posts ||--o{ PostActivityLogs : "PostId"
+    AppUsers ||--o{ AppUserRoles : ""
+    AppRoles ||--o{ AppUserRoles : ""
+    AppUsers ||--o{ AppUserClaims : ""
+    AppUsers ||--o{ AppUserLogins : ""
+    AppUsers ||--o{ AppUserTokens : ""
+    AppRoles ||--o{ AppRoleClaims : ""
 
     AppUsers {
         Guid Id
         String FirstName
         String LastName
         Boolean IsActive
-        String UserName
-        String Email
-        String PasswordHash
+        String RefreshToken
+        DateTime RefreshTokenExpiryTime
         DateTime DateCreated
+        String UserName
+        String NormalizedUserName
+        String Email
+        String NormalizedEmail
+        Boolean EmailConfirmed
+        String PasswordHash
+        String SecurityStamp
+        String ConcurrencyStamp
+        String PhoneNumber
+        Boolean PhoneNumberConfirmed
+        Boolean TwoFactorEnabled
+        DateTime LockoutEnd
+        Boolean LockoutEnabled
+        Int AccessFailedCount
+        String Avatar
         DateTime Dob
+        DateTime LastLoginDate
         DateTime VipExpireDate
+        DateTime VipStartDate
     }
 
-    Posts {
+    AppRoles {
         Guid Id
+        String DisplayName
         String Name
-        String Slug
-        String Content
-        Guid CategoryId
-        String Status
-        Decimal RoyaltyAmount
-        Guid OwnerUserId
-        Guid ApprovedUserId
+        String NormalizedName
+        String ConcurrencyStamp
     }
+
+    AppUserRoles {
+        Guid UserId
+        Guid RoleId
+    }
+
+    AppUserLogins {
+        Guid UserId
+        String LoginProvider
+        String ProviderKey
+        String ProviderDisplayName
+    }
+
+    AppUserTokens {
+        Guid UserId
+        String LoginProvider
+        String Name
+        String Value
+    }
+
+    AppUserClaims {
+        Int Id
+        Guid UserId
+        String ClaimType
+        String ClaimValue
+    }
+
+    AppRoleClaims {
+        Int Id
+        Guid RoleId
+        String ClaimType
+        String ClaimValue
+    }
+
+    erDiagram
+    Posts ||--o{ PostTags : ""
+    Tags ||--o{ PostTags : ""
+    Posts ||--o{ PostInSeries : ""
+    Series ||--o{ PostInSeries : ""
+    Posts ||--o{ PostActivityLogs : ""
+    PostCategories ||--o{ Posts : ""
 
     Series {
         Guid Id
         String Name
         String Description
         String Slug
+        Boolean IsActive
+        Int SortOrder
+        String SeoKeywords
+        String SeoDescription
+        String Thumbnail
+        String Content
         Guid OwnerUserId
+    }
+
+    PostInSeries {
+        Guid PostId
+        Guid SeriesId
+        Int DisplayOrder
+    }
+
+    Tags {
+        Guid Id
+        String Name
+    }
+
+    Posts {
+        Guid Id
+        String Name
+        String Slug
+        String Description
+        Guid CategoryId
+        String Thumbnail
+        String Content
+        String Source
+        String Status
+        Int ViewCount
+        String Tags
+        String SeoKeywords
+        String SeoDescription
+        DateTime DateCreated
+        DateTime DateModified
+        Guid OwnerUserId
+        Guid ApprovedUserId
+        Boolean IsPaid
+        Decimal RoyaltyAmount
+    }
+
+    PostTags {
+        Guid PostId
+        Guid TagId
     }
 
     PostCategories {
@@ -63,6 +147,11 @@ erDiagram
         String Slug
         Guid ParentId
         Boolean IsActive
+        DateTime DateCreated
+        DateTime DateModified
+        String SeoKeywords
+        String SeoDescription
+        Int SortOrder
     }
 
     PostActivityLogs {
@@ -70,13 +159,7 @@ erDiagram
         Guid PostId
         String FromStatus
         String ToStatus
-        String Note
         DateTime DateCreated
+        String Note
         Guid UserId
-    }
-
-    PostInSeries {
-        Guid PostId
-        Guid SeriesId
-        Int DisplayOrder
     }
