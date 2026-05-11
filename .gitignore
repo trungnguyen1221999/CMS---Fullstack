@@ -1,26 +1,19 @@
-# Ignore node_modules
-node_modules/
-
-# Ignore build output
-dist/
-build/
-
-# Ignore logs
-*.log
-
-# Ignore environment files
-.env
-.env.*
-
-# Ignore OS generated files
-.DS_Store
-Thumbs.db
-
-# Ignore IDE files
-.vscode/
-.idea/
-*.suo
-*.userosscache
-*.sln.docstates
+# --- .NET CORE / VS IGNORE ---
+[Bb]in/
+[Oo]bj/
 .vs/
 *.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+# --- NUGET ---
+project.assets.json
+*.nuget.g.props
+*.nuget.g.targets
+
+# --- OS & OTHERS ---
+.DS_Store
+Thumbs.db
+.env
+.env.*

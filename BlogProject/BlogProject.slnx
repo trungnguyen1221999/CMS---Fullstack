@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src/Cores/Cores.csproj" />
+  <Project Path="src/Data/Datas.csproj" />
+  <Project Path="src/WebApi/Apis.csproj" />
+</Solution>
