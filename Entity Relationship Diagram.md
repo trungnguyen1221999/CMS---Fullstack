@@ -4,58 +4,79 @@ The following diagram illustrates the database structure based on the system des
 
 ```mermaid
 erDiagram
-    AppUsers ||--o{ AppUserRoles : "has"
-    AppRoles ||--o{ AppUserRoles : "assigned to"
-    AppUsers ||--o{ AppUserClaims : "has"
-    AppUsers ||--o{ AppUserLogins : "logs in with"
-    AppUsers ||--o{ AppUserTokens : "owns"
-    
-    AppUsers ||--o{ Posts : "authors"
-    AppUsers ||--o{ PostActivityLogs : "performs"
-    AppUsers ||--o{ Series : "owns"
+    AppUsers ||--o{ AppUserRoles : "User has roles"
+    AppRoles ||--o{ AppUserRoles : "Role assigned to users"
+    AppUsers ||--o{ AppUserClaims : "User claims"
+    AppUsers ||--o{ AppUserLogins : "External logins"
+    AppUsers ||--o{ AppUserTokens : "User tokens"
+    AppRoles ||--o{ AppRoleClaims : "Role claims"
 
-    PostCategories ||--o{ PostCategories : "parent/child"
-    PostCategories ||--o{ Posts : "contains"
+    AppUsers ||--o{ Posts : "OwnerUserId"
+    AppUsers ||--o{ Series : "OwnerUserId"
+    AppUsers ||--o{ PostActivityLogs : "UserId"
+
+    PostCategories ||--o{ Posts : "CategoryId"
+    Posts ||--o{ PostTags : "PostId"
+    Tags ||--o{ PostTags : "TagId"
     
-    Posts ||--o{ PostTags : "has"
-    Tags ||--o{ PostTags : "categorizes"
+    Posts ||--o{ PostInSeries : "PostId"
+    Series ||--o{ PostInSeries : "SeriesId"
     
-    Posts ||--o{ PostInSeries : "part of"
-    Series ||--o{ PostInSeries : "groups"
-    
-    Posts ||--o{ PostActivityLogs : "tracks"
+    Posts ||--o{ PostActivityLogs : "PostId"
 
     AppUsers {
-        string Id
-        string UserName
-        string Email
-        string FullName
-        datetime DateCreated
-        decimal RoyaltyBalance
+        Guid Id
+        String FirstName
+        String LastName
+        Boolean IsActive
+        String UserName
+        String Email
+        String PasswordHash
+        DateTime DateCreated
+        DateTime Dob
+        DateTime VipExpireDate
     }
 
     Posts {
-        string Id
-        string Name
-        string Slug
-        string Content
-        int Status
-        decimal RoyaltyAmount
-        string OwnerUserId
-        string CategoryId
+        Guid Id
+        String Name
+        String Slug
+        String Content
+        Guid CategoryId
+        String Status
+        Decimal RoyaltyAmount
+        Guid OwnerUserId
+        Guid ApprovedUserId
     }
 
     Series {
-        string Id
-        string Name
-        string OwnerUserId
+        Guid Id
+        String Name
+        String Description
+        String Slug
+        Guid OwnerUserId
+    }
+
+    PostCategories {
+        Guid Id
+        String Name
+        String Slug
+        Guid ParentId
+        Boolean IsActive
     }
 
     PostActivityLogs {
-        int Id
-        string PostId
-        string FromStatus
-        string ToStatus
-        datetime DateCreated
-        string UserId
+        Guid Id
+        Guid PostId
+        String FromStatus
+        String ToStatus
+        String Note
+        DateTime DateCreated
+        Guid UserId
+    }
+
+    PostInSeries {
+        Guid PostId
+        Guid SeriesId
+        Int DisplayOrder
     }
