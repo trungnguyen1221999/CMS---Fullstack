@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="src/Cores/Cores.csproj" />
-  <Project Path="src/Data/Datas.csproj" />
-  <Project Path="src/WebApi/Apis.csproj" />
+  <Project Path="src/Cores/BlogProject.Core.csproj" />
+  <Project Path="src/Data/BlogProject.Infrastructure.csproj" />
+  <Project Path="src/WebApi/BlogProject.Api.csproj" />
 </Solution>
