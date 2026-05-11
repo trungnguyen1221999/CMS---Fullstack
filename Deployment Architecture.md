@@ -24,7 +24,6 @@ graph TD
     %% Define API Layer
     subgraph Server_1["Server 1 (API Layer)"]
         AdminAPI[Admin API]
-        Text_Service[Text Service]
         MobileAPI[Mobile API]
     end
 
