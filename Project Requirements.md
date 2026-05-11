@@ -30,16 +30,26 @@
 - **Royalty/Earnings Info**: Track payments and revenue for contributed content.
 - **Notifications**: Real-time alerts for system updates or post status.
 
+---
+
 ## 4. Post Life Cycle (Workflow Diagram)
-stateDiagram
-  direction TB
-  [*] --> Draft
-  Draft --> Canceled:Cancel
-  Canceled --> [*]
-  Draft --> WaitingForApproval:Submit for approval
-  WaitingForApproval --> Rejected:Reject with a comment
-  Rejected --> Draft:Assign to creator
-  WaitingForApproval --> Published:Approve and publish now
-  WaitingForApproval --> WaitingForPublished:Approve and schedule to publish
-  WaitingForPublished --> Published:Published (auto or manual)
-  Published --> [*]
+
+```mermaid
+stateDiagram-v2
+    direction TB
+    [*] --> Draft
+    
+    Draft --> Canceled: Cancel
+    Canceled --> [*]
+    
+    Draft --> WaitingForApproval: Submit for approval
+    
+    WaitingForApproval --> Rejected: Reject with a comment
+    Rejected --> Draft: Assign to creator
+    
+    WaitingForApproval --> Published: Approve and publish now
+    
+    WaitingForApproval --> WaitingForPublished: Approve and schedule to publish
+    WaitingForPublished --> Published: Published (auto or manual)
+    
+    Published --> [*]
