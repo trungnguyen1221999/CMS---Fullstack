@@ -4,12 +4,27 @@ The following diagram illustrates the database structure based on the system des
 
 ```mermaid
 erDiagram
-    AppUsers ||--o{ AppUserRoles : ""
-    AppRoles ||--o{ AppUserRoles : ""
-    AppUsers ||--o{ AppUserClaims : ""
-    AppUsers ||--o{ AppUserLogins : ""
-    AppUsers ||--o{ AppUserTokens : ""
-    AppRoles ||--o{ AppRoleClaims : ""
+    %% Identity Relationships
+    AppUsers ||--o{ AppUserRoles : "has"
+    AppRoles ||--o{ AppUserRoles : "assigned to"
+    AppUsers ||--o{ AppUserClaims : "claims"
+    AppUsers ||--o{ AppUserLogins : "logins"
+    AppUsers ||--o{ AppUserTokens : "tokens"
+    AppRoles ||--o{ AppRoleClaims : "claims"
+
+    %% CMS Cross-Relationships (Linking Users to Content)
+    AppUsers ||--o{ Posts : "OwnerUserId"
+    AppUsers ||--o{ Posts : "ApprovedUserId"
+    AppUsers ||--o{ Series : "OwnerUserId"
+    AppUsers ||--o{ PostActivityLogs : "UserId"
+
+    %% Content Relationships
+    PostCategories ||--o{ Posts : "categorizes"
+    Posts ||--o{ PostTags : "has"
+    Tags ||--o{ PostTags : "belongs to"
+    Posts ||--o{ PostInSeries : "part of"
+    Series ||--o{ PostInSeries : "contains"
+    Posts ||--o{ PostActivityLogs : "logs"
 
     AppUsers {
         Guid Id
@@ -80,13 +95,6 @@ erDiagram
         String ClaimType
         String ClaimValue
     }
-
-    Posts ||--o{ PostTags : ""
-    Tags ||--o{ PostTags : ""
-    Posts ||--o{ PostInSeries : ""
-    Series ||--o{ PostInSeries : ""
-    Posts ||--o{ PostActivityLogs : ""
-    PostCategories ||--o{ Posts : ""
 
     Series {
         Guid Id
