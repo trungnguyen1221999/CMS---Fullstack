@@ -1,6 +1,7 @@
 ## Database Design (ERD)
 
-graph TD
+```mermaid
+graph LR
     subgraph Users
         Admin[Administrators]
         Mod[Moderators]
@@ -8,31 +9,26 @@ graph TD
         Vis[Visitors]
     end
 
-    subgraph "Server 3 (UI Applications)"
-        AdminApp[Admin Web App]
+    subgraph "Server 3 (Admin App)"
+        AdminApp[Admin Web Interface]
     end
 
-    subgraph "Server 2 (UI Applications)"
-        PortalApp[Portal Web App]
+    subgraph "Server 2 (Portal App)"
+        PortalApp[News Portal Web]
     end
 
     subgraph "Server 1 (API Services)"
-        AdminAPI[Admin API]
+        API[Central Admin API]
     end
 
-    subgraph "Server 4 (Data Storage)"
-        DB[(Central Database)]
+    subgraph "Server 4 (Database)"
+        DB[(SQL Database)]
     end
 
-    %% Connections
-    Admin --> AdminApp
-    Mod --> AdminApp
-    Ed --> AdminApp
-    
-    Ed --> PortalApp
-    Vis --> PortalApp
+    %% Flow
+    Admin & Mod & Ed --> AdminApp
+    Ed & Vis --> PortalApp
 
-    AdminApp --> AdminAPI
-    PortalApp --> AdminAPI
-    
-    AdminAPI --> DB
+    AdminApp --> API
+    PortalApp --> API
+    API --> DB
