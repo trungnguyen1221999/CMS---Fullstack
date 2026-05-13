@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogProject.Infrastructure.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20260513114527_Initial")]
+    [Migration("20260513114827_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -278,11 +278,6 @@ namespace BlogProject.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
