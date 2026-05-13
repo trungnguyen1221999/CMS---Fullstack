@@ -17,3 +17,4 @@ project.assets.json
 Thumbs.db
 .env
 .env.*
+BlogProject/src/Data/appsettings.json
