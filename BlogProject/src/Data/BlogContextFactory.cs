@@ -13,7 +13,7 @@ namespace BlogProject.Infrastructure
                 .AddJsonFile("appsettings.json")
                 .Build();
             var builder = new DbContextOptionsBuilder<BlogContext>();
-            builder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             return new BlogContext(builder.Options);
         }
     }

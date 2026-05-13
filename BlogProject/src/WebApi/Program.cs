@@ -10,7 +10,7 @@ var connectionString = configuration.GetConnectionString("DefaultConnection");
 // Add services to the container.
 
 //Config DB Context and ASP.NET Core Identity
-builder.Services.AddDbContext<BlogContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<BlogContext>(options => options.UseNpgsql(connectionString));
 
 builder
     .Services.AddIdentity<AppUser, AppRole>(options =>
