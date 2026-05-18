@@ -1,7 +1,10 @@
+using System.Reflection;
 using BlogProject.Api;
 using BlogProject.Core.Domain.Identity;
+using BlogProject.Core.Repositories;
 using BlogProject.Core.SeedWorks;
 using BlogProject.Data;
+using BlogProject.Data.Repositories;
 using BlogProject.Data.SeedWorks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +13,31 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-//Add services with Open Generics
+// Add services to the container.
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(RepositoryBase<,>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// Add services to the container.
+// Add business services and repositories
+
+var dataAssembly = Assembly.GetAssembly(typeof(PostRepository));
+
+//Scan and retrieve all concrete, non-abstract classes ending with "Repository"
+var repositories = dataAssembly
+    .GetTypes()
+    .Where(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith("Repository"));
+
+foreach (var repository in repositories)
+{
+    // Find the corresponding interface by naming convention (e.g., PostRepository matches IPostRepository)
+    var iRepository = repository
+        .GetInterfaces()
+        .FirstOrDefault(i => i.Name == $"I{repository.Name}");
+
+    if (iRepository != null)
+    {
+        builder.Services.AddScoped(iRepository, repository);
+    }
+}
 
 //Config DB Context and ASP.NET Core Identity
 builder.Services.AddDbContext<BlogContext>(options => options.UseNpgsql(connectionString));
