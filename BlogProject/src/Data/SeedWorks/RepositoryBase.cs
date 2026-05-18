@@ -4,14 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlogProject.Data.SeedWorks
 {
-    internal class RepositoryBase<T, Key> : IRepository<T, Key>
+    public class RepositoryBase<T, Key> : IRepository<T, Key>
         where T : class
     {
+        protected readonly BlogContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public RepositoryBase(DbSet<T> dbSet)
+        public RepositoryBase(BlogContext context)
         {
-            _dbSet = dbSet;
+            _dbSet = context.Set<T>();
+            _context = context;
         }
 
         public void Add(T entity)

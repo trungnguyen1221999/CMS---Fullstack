@@ -1,12 +1,18 @@
 using BlogProject.Api;
 using BlogProject.Core.Domain.Identity;
+using BlogProject.Core.SeedWorks;
 using BlogProject.Data;
+using BlogProject.Data.SeedWorks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+//Add services with Open Generics
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(RepositoryBase<,>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add services to the container.
 
