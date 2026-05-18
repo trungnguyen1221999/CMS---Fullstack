@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlogProject.Infrastructure
+namespace BlogProject.Data
 {
     public class BlogContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
@@ -22,6 +22,8 @@ namespace BlogProject.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<AppUser>().ToTable("AppUsers");
+            builder.Entity<AppRole>().ToTable("AppRoles");
             builder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims").HasKey(x => x.Id);
 
             builder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims").HasKey(x => x.Id);
