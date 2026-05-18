@@ -1,3 +1,4 @@
+using BlogProject.Api;
 using BlogProject.Core.Domain.Identity;
 using BlogProject.Data;
 using Microsoft.AspNetCore.Identity;
@@ -60,5 +61,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//Seeding Data to DB
+
+app.MigrationDataBase();
 
 app.Run();

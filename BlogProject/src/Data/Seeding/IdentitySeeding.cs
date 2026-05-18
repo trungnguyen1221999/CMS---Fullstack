@@ -37,7 +37,7 @@ namespace BlogProject.Data.Seeding
                     LastName = "Nguyen",
                     IsActive = true,
                     DateCreated = DateTime.UtcNow,
-                    ConcurrencyStamp = Guid.NewGuid().ToString(),
+                    SecurityStamp = Guid.NewGuid().ToString(),
                     LockoutEnabled = false,
                 };
                 seedingAdminUser.PasswordHash = passwordHasher.HashPassword(
