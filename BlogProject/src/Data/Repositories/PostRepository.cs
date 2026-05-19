@@ -1,5 +1,7 @@
-﻿using BlogProject.Core.Domain.Content;
+﻿using AutoMapper;
+using BlogProject.Core.Domain.Content;
 using BlogProject.Core.Models;
+using BlogProject.Core.Models.Content;
 using BlogProject.Core.Repositories;
 using BlogProject.Data.SeedWorks;
 using Microsoft.EntityFrameworkCore;
@@ -8,15 +10,20 @@ namespace BlogProject.Data.Repositories
 {
     public class PostRepository : RepositoryBase<Post, Guid>, IPostRepository
     {
-        public PostRepository(BlogContext context)
-            : base(context) { }
+        private readonly IMapper _mapper;
+
+        public PostRepository(BlogContext context, IMapper mapper)
+            : base(context)
+        {
+            _mapper = mapper;
+        }
 
         public Task<List<Post>> GetPopularPostsAsync(int count)
         {
             return _context.Posts.OrderByDescending(p => p.ViewCount).Take(count).ToListAsync();
         }
 
-        public async Task<PageResult<Post>> GetPostPagingAsync(
+        public async Task<PageResult<PostInListDto>> GetPostPagingAsync(
             string? keyword,
             Guid? categoryId,
             int pageIndex = 1,
@@ -37,9 +44,9 @@ namespace BlogProject.Data.Repositories
                 .OrderByDescending(p => p.DateCreated)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize);
-            return new PageResult<Post>
+            return new PageResult<PostInListDto>
             {
-                Result = await query.ToListAsync(),
+                Result = await _mapper.ProjectTo<PostInListDto>(query).ToListAsync(),
                 CurrentPage = pageIndex,
                 PageSize = pageSize,
                 RowCount = totalRow,

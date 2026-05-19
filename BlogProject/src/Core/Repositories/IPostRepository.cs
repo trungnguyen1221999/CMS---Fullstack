@@ -1,5 +1,6 @@
 ﻿using BlogProject.Core.Domain.Content;
 using BlogProject.Core.Models;
+using BlogProject.Core.Models.Content;
 using BlogProject.Core.SeedWorks;
 
 namespace BlogProject.Core.Repositories
@@ -8,7 +9,7 @@ namespace BlogProject.Core.Repositories
     {
         Task<List<Post>> GetPopularPostsAsync(int count);
 
-        Task<PageResult<Post>> GetPostPagingAsync(
+        Task<PageResult<PostInListDto>> GetPostPagingAsync(
             string? keyword,
             Guid? categoryId,
             int pageIndex = 1,

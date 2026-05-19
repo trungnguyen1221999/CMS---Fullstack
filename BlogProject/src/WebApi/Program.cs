@@ -1,7 +1,7 @@
 using System.Reflection;
 using BlogProject.Api;
 using BlogProject.Core.Domain.Identity;
-using BlogProject.Core.Repositories;
+using BlogProject.Core.Models.Content;
 using BlogProject.Core.SeedWorks;
 using BlogProject.Data;
 using BlogProject.Data.Repositories;
@@ -38,6 +38,10 @@ foreach (var repository in repositories)
         builder.Services.AddScoped(iRepository, repository);
     }
 }
+
+//AutoMapper
+
+builder.Services.AddAutoMapper(typeof(PostInListDto));
 
 //Config DB Context and ASP.NET Core Identity
 builder.Services.AddDbContext<BlogContext>(options => options.UseNpgsql(connectionString));
