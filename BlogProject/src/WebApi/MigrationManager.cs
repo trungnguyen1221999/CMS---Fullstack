@@ -6,14 +6,14 @@ namespace BlogProject.Api
 {
     public static class MigrationManager
     {
-        public static WebApplication MigrationDataBase(this WebApplication app)
+        public static WebApplication MigrationDatabase(this WebApplication app)
         {
             using (var scope = app.Services.CreateScope())
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<BlogContext>())
                 {
                     context.Database.Migrate();
-                    new IdentitySeeding().Seeding(context).Wait();
+                    new IdentitySeeding().SeedingAsync(context).Wait();
                 }
             }
             return app;

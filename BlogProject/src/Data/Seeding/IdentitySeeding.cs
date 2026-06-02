@@ -5,7 +5,7 @@ namespace BlogProject.Data.Seeding
 {
     public class IdentitySeeding
     {
-        public async Task Seeding(BlogContext context)
+        public async Task SeedingAsync(BlogContext context)
         {
             var passwordHasher = new PasswordHasher<AppUser>();
 

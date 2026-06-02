@@ -1,17 +1,14 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+﻿using AutoMapper;
 using BlogProject.Core.Domain.Content;
 
 namespace BlogProject.Core.Models.Content
 {
     public class CreateUpdatePostRequest
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public string Slug { get; set; }
+        public string Slug { get; set; } = string.Empty;
 
-        [MaxLength(500)]
         public string? Description { get; set; }
 
         public string? Thumbnail { get; set; }

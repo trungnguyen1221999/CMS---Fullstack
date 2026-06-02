@@ -1,4 +1,4 @@
-using System.Reflection;
+using AutoMapper;
 using BlogProject.Api;
 using BlogProject.Core.Domain.Identity;
 using BlogProject.Core.Models.Content;
@@ -8,6 +8,8 @@ using BlogProject.Data.Repositories;
 using BlogProject.Data.SeedWorks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -18,38 +20,38 @@ builder.Services.AddScoped(typeof(IRepository<,>), typeof(RepositoryBase<,>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add business services and repositories
-
 var dataAssembly = Assembly.GetAssembly(typeof(PostRepository));
-
-//Scan and retrieve all concrete, non-abstract classes ending with "Repository"
-var repositories = dataAssembly
-    .GetTypes()
-    .Where(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith("Repository"));
-
-foreach (var repository in repositories)
+if (dataAssembly != null)
 {
-    // Find the corresponding interface by naming convention (e.g., PostRepository matches IPostRepository)
-    var iRepository = repository
-        .GetInterfaces()
-        .FirstOrDefault(i => i.Name == $"I{repository.Name}");
+    var repositories = dataAssembly
+        .GetTypes()
+        .Where(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith("Repository"));
 
-    if (iRepository != null)
+    foreach (var repository in repositories)
     {
-        builder.Services.AddScoped(iRepository, repository);
+        var iRepository = repository
+            .GetInterfaces()
+            .FirstOrDefault(i => i.Name == $"I{repository.Name}");
+
+        if (iRepository != null)
+        {
+            builder.Services.AddScoped(iRepository, repository);
+        }
     }
 }
 
-//AutoMapper
+// ----  AutoMapper ----
+var mapperConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AddMaps(typeof(PostInListDto).Assembly);
+}, NullLoggerFactory.Instance);
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+// -------------------------------------------
 
-builder.Services.AddAutoMapper(typeof(PostInListDto));
-
-//Config DB Context and ASP.NET Core Identity
+// Config DB Context and ASP.NET Core Identity
 builder.Services.AddDbContext<BlogContext>(options => options.UseNpgsql(connectionString));
-
-builder
-    .Services.AddIdentity<AppUser, AppRole>(options =>
-        options.SignIn.RequireConfirmedAccount = false
-    )
+builder.Services.AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<BlogContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -68,15 +70,12 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.AllowedForNewUsers = true;
 
     // User settings.
-    options.User.AllowedUserNameCharacters =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = false;
 });
 
-//Default config for ASP.NET Core
+// Default config for ASP.NET Core
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -90,13 +89,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
-//Seeding Data to DB
-
-app.MigrationDataBase();
+// Seeding Data to DB
+app.MigrationDatabase();
 
 app.Run();

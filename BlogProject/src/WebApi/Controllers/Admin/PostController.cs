@@ -69,7 +69,7 @@ namespace BlogProject.Api.Controllers.Admin
         [Route("{id}")]
         public async Task<ActionResult<PostDto>> GetPostById(Guid id)
         {
-            var post = _unitOfWork.Posts.GetByIdAsync(id);
+            var post = await _unitOfWork.Posts.GetByIdAsync(id);
             if (post == null)
             {
                 return NotFound();
