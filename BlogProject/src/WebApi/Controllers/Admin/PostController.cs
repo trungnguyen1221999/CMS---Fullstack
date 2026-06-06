@@ -3,7 +3,6 @@ using BlogProject.Core.Domain.Content;
 using BlogProject.Core.Models;
 using BlogProject.Core.Models.Content;
 using BlogProject.Core.SeedWorks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogProject.Api.Controllers.Admin

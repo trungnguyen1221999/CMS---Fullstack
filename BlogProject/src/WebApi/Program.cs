@@ -1,5 +1,7 @@
 using AutoMapper;
 using BlogProject.Api;
+using BlogProject.Api.Services;
+using BlogProject.Core.ConfigOptions;
 using BlogProject.Core.Domain.Identity;
 using BlogProject.Core.Models.Content;
 using BlogProject.Core.SeedWorks;
@@ -48,6 +50,15 @@ var mapperConfig = new MapperConfiguration(cfg =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 // -------------------------------------------
+
+
+builder.Services.Configure<JwtTokenSettings>(configuration.GetSection("JwtTokenSettings"));
+
+// Authentication and Authorization
+builder.Services.AddScoped<SignInManager<AppUser>>();
+builder.Services.AddScoped<UserManager<AppUser>>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<RoleManager<AppRole>>();
 
 // Config DB Context and ASP.NET Core Identity
 builder.Services.AddDbContext<BlogContext>(options => options.UseNpgsql(connectionString));
