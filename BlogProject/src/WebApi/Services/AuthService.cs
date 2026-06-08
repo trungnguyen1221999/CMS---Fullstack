@@ -12,15 +12,15 @@ namespace BlogProject.Api.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly RoleManager<AppRole> _roleManager;
+        private readonly IPermissionService _permissionService;
 
         private readonly ITokenService _tokenService;
-        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, ITokenService tokenService)
+        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, ITokenService tokenService, IPermissionService permissionService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
-            _roleManager = roleManager;
+            _permissionService = permissionService;
         }
         public async Task<AuthenticatedResult?> LoginAsync(LoginRequest request)
         {
@@ -33,6 +33,7 @@ namespace BlogProject.Api.Services
             if (!result.Succeeded) return null;
 
             var roles = await _userManager.GetRolesAsync(user);
+            var permissions = await _permissionService.GetPermissionByIdAsync(user.Id.ToString());
             var claims = new[]
             {
                  new Claim(JwtRegisteredClaimNames.Email, user.Email),
@@ -41,7 +42,7 @@ namespace BlogProject.Api.Services
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(UserClaims.FirstName, user.FirstName),
                     new Claim(UserClaims.Roles, string.Join(";", roles)),
-                    //new Claim(UserClaims.Permissions, JsonSerializer.Serialize(permissions)),
+                    new Claim(UserClaims.Permissions, JsonSerializer.Serialize(permissions)),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

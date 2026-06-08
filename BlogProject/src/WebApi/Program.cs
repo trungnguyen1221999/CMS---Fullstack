@@ -56,6 +56,7 @@ builder.Services.Configure<JwtTokenSettings>(configuration.GetSection("JwtTokenS
 
 // Authentication and Authorization
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPermissionService,  PermissionService>();
 builder.Services.AddScoped<SignInManager<AppUser>>();
 builder.Services.AddScoped<UserManager<AppUser>>();
 builder.Services.AddScoped<ITokenService, TokenService>();

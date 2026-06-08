@@ -5,9 +5,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace BlogProject.Core.SeedWorks
+namespace BlogProject.Core.SeedWorks.Constants
 {
-    public static class UserPermission
+    public static class UserPermissions
     {
         public static class Dashboard
         {
