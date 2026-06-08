@@ -55,10 +55,12 @@ builder.Services.AddSingleton(mapper);
 builder.Services.Configure<JwtTokenSettings>(configuration.GetSection("JwtTokenSettings"));
 
 // Authentication and Authorization
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<SignInManager<AppUser>>();
 builder.Services.AddScoped<UserManager<AppUser>>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<RoleManager<AppRole>>();
+
 
 // Config DB Context and ASP.NET Core Identity
 builder.Services.AddDbContext<BlogContext>(options => options.UseNpgsql(connectionString));
